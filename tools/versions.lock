@@ -1,9 +1,16 @@
 # Pinned tool versions on the source-of-truth machine (home WSL).
+# DOCUMENTATION ONLY — nothing reads this file; it is a snapshot for reproducing.
 # Reference for reproducing; bump deliberately.
+#
+# Claude-version resilience: bootstrap.sh does NOT install or pin claude — the
+# native installer self-updates, so claude moves forward on its own. The real risk
+# is the reverse: a tool frozen here lagging BEHIND a claude upgrade. The one hard
+# pin sitting in claude's request path is headroom-ai (it proxies every API call);
+# bump it and re-test `cch` whenever claude has a major update.
 
-claude          2.1.178      # native installer (~/.local/share/claude)
+claude          2.1.178      # native installer (~/.local/share/claude); NOT pinned/installed by bootstrap — self-updates. Number = snapshot at capture time.
 rtk             0.42.3       # prebuilt static-pie ELF binary in ~/.local/bin (no package index)
-headroom-ai     0.25.0       # uv tool -> bin: headroom. Needs TWO extras:
+headroom-ai     0.25.0       # HARD-pinned in bootstrap.sh (==0.25.0). uv tool -> bin: headroom. Needs TWO extras:
                              #   uv tool install 'headroom-ai[proxy]==0.25.0' --with mcp
                              #   [proxy] = fastapi/uvicorn for 'headroom wrap'/cch (else "No module named 'fastapi'")
                              #   mcp     = SDK for 'headroom mcp serve' (else ImportError)

@@ -131,6 +131,14 @@ printf "  rtk:        %s\n" "$(rtk --version 2>&1 | head -1)"
 printf "  headroom:   %s\n" "$(headroom --version 2>&1 | head -1 || echo MISSING)"
 printf "  markitdown: %s\n" "$(command -v markitdown || echo MISSING)"
 printf "  node:       %s\n" "$(node --version 2>&1 | head -1)"
+# hook health: the node path baked into the installed settings.json must resolve,
+# else the SessionStart/UserPromptSubmit (caveman) hooks silently no-op after a
+# node bump or on a fresh box — a failure mode that never raises an error.
+HOOK_NODE="$(grep -oE '/[^"]*/fnm/node-versions/v[0-9.]+/installation/bin/node' ~/.claude/settings.json 2>/dev/null | head -1)"
+if [ -n "$HOOK_NODE" ]; then
+  if [ -x "$HOOK_NODE" ]; then printf "  hook node:  OK\n"
+  else warn "hook node path in settings.json does not resolve: $HOOK_NODE — caveman hooks will silently no-op. Re-run bootstrap to repair."; fi
+fi
 echo; log "MCP servers:"; claude mcp list 2>&1 | sed 's/^/  /' || true
 echo
 [ "$DRY" = 1 ] && { warn "DRY-RUN complete — re-run without DRY_RUN=1 to apply."; exit 0; }
