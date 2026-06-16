@@ -1,7 +1,7 @@
 # claude-code-config — portable Claude Code setup
 
-One source of truth for my Claude Code config across WSL machines (home ⇄ company ⇄ any new box).
-Hybrid approach: **config repo + idempotent `bootstrap.sh`** for personal config and CLI tools,
+One source of truth for my Claude Code config across machines — WSL/Linux **and native Windows** (home ⇄ company ⇄ any new box).
+Hybrid approach: **config repo + idempotent bootstrap** (`bootstrap.sh` for WSL/Linux, `bootstrap.ps1` for native Windows) for personal config and CLI tools,
 **declarative plugin re-install** (via `claude/settings.json`) for the shareable extensions.
 
 ## New machine — one command
@@ -19,6 +19,30 @@ claude                  # first launch fetches + enables all plugins
 > variable, and pointing it at the repo hijacks claude away from `~/.claude`.)
 
 `bootstrap.sh` is idempotent — safe to re-run any time to converge a machine back to this config.
+
+## Native Windows — one command
+
+For a company box where Claude Code runs on **native Windows** (`%USERPROFILE%\.claude`), not WSL:
+
+```powershell
+git clone git@github.com:chuenchen309/claude-code-config.git $HOME\claude-code-config
+pwsh -File $HOME\claude-code-config\bootstrap.ps1   # preview first: $env:DRY_RUN=1; pwsh -File ...\bootstrap.ps1
+# open a NEW PowerShell, then:
+claude                                              # first launch fetches + enables all plugins
+```
+
+`bootstrap.ps1` is the Windows port of `bootstrap.sh` — same idempotent, re-runnable contract. It diverges from the Linux flow only where the OS forces it:
+
+| Area | Windows behavior |
+|---|---|
+| caveman hooks | settings.json `command` rewritten from the Linux fnm node path to portable **exec form** `{"command":"node","args":["C:/Users/<you>/.claude/hooks/…"]}` (forward slashes; works in Git Bash *and* PowerShell). |
+| `rtk hook claude` | **dropped** from settings.json — rtk's hook integration is WSL-only (needs a Unix shell); a missing `rtk` would error on every Bash call. |
+| MCP servers | registered with `claude mcp add-json` (sidesteps the Windows `-- cmd /c` / `--from` arg-parsing bugs); context7 via `cmd /c npx`, markitdown via absolute `%USERPROFILE%\.local\bin\markitdown-mcp.exe`, serena via `uv tool run` (no separate `uvx.exe` needed). |
+| headroom | best-effort — its sdist needs Rust/maturin to build on Windows; if the build fails, the headroom MCP server **and** `cch` are skipped (non-fatal). |
+| `cch` alias | installed as a PowerShell `$PROFILE` function (no `~/.bashrc`), only when headroom is present. |
+| rtk / filters.toml | skipped (rtk ships a Linux binary). |
+
+**Prereqs on the Windows box:** Node.js on PATH (Claude Code + caveman hooks need it), Git for Windows (enables the Bash tool + Git Bash hook execution), and PowerShell 7 recommended (`winget install Microsoft.PowerShell`). `bootstrap.ps1` installs `uv` itself if missing.
 
 ## What it installs / configures
 
