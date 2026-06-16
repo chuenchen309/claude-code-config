@@ -1,17 +1,20 @@
-# dotfiles — portable Claude Code setup
+# claude-code-config — portable Claude Code setup
 
 One source of truth for my Claude Code config across WSL machines (home ⇄ company ⇄ any new box).
-Hybrid approach: **dotfiles repo + idempotent `bootstrap.sh`** for personal config and CLI tools,
+Hybrid approach: **config repo + idempotent `bootstrap.sh`** for personal config and CLI tools,
 **declarative plugin re-install** (via `claude/settings.json`) for the shareable extensions.
 
 ## New machine — one command
 
 ```bash
-git clone <this-repo-url> ~/dotfiles
-~/dotfiles/bootstrap.sh
+git clone git@github.com:chuenchen309/claude-code-config.git ~/claude-code-config
+~/claude-code-config/bootstrap.sh
 source ~/.bashrc        # pick up the cch alias
 claude                  # first launch fetches + enables all plugins
 ```
+
+> Want the repo somewhere else? Clone wherever you like and set `CLAUDE_CONFIG_DIR` to that path
+> (default `$HOME/claude-code-config`) — `bootstrap.sh` self-locates, and the `~/.bashrc` block honors the var.
 
 `bootstrap.sh` is idempotent — safe to re-run any time to converge a machine back to this config.
 
@@ -25,7 +28,7 @@ claude                  # first launch fetches + enables all plugins
 | 4 | copies `settings.json`, `CLAUDE.md`, `RTK.md`, `hooks/`, `skills/` into `~/.claude` (backs up existing) |
 | 4b | repairs the machine-specific fnm node path inside `settings.json` |
 | 5 | installs `rtk/filters.toml` → `~/.config/rtk/` |
-| 6 | sources `shell/aliases.sh` from `~/.bashrc` (the `cch` alias) |
+| 6 | adds a `CLAUDE_CONFIG_DIR` block to `~/.bashrc` that sources `shell/aliases.sh` (the `cch` alias) |
 | 7 | registers MCP servers: context7, markitdown, headroom, serena |
 | 8 | plugins re-install declaratively on next `claude` launch |
 | 9 | prints a verification checklist |
@@ -53,7 +56,7 @@ Re-authenticate per machine instead — run `/mcp` inside claude for any OAuth c
 
 ## Updating the config
 
-Edit files here (or copy fresh from `~/.claude`), commit, push. On other machines: `git pull && ~/dotfiles/bootstrap.sh`.
+Edit files here (or copy fresh from `~/.claude`), commit, push. On other machines: `git pull && ~/claude-code-config/bootstrap.sh`.
 
 ## Manual steps bootstrap can't do headlessly
 

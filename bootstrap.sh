@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # bootstrap.sh — idempotently reproduce the Claude Code setup on a fresh WSL/Linux box.
 # Safe to re-run: every step is guarded.
-#   real run:  ~/dotfiles/bootstrap.sh
-#   preview :  DRY_RUN=1 ~/dotfiles/bootstrap.sh   (prints every change, mutates nothing)
+#   real run:  ~/claude-code-config/bootstrap.sh
+#   preview :  DRY_RUN=1 ~/claude-code-config/bootstrap.sh   (prints every change, mutates nothing)
+# Repo location is configurable via $CLAUDE_CONFIG_DIR (default: $HOME/claude-code-config).
 set -euo pipefail
 
 DOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -96,8 +97,20 @@ if [ -f "$DOT/rtk/filters.toml" ]; then
   log "install ~/.config/rtk/filters.toml"
 fi
 
-# ── 6. shell aliases (cch) — source once ────────────────────────────────────
-append_once 'source "$HOME/dotfiles/shell/aliases.sh"' ~/.bashrc
+# ── 6. shell aliases (cch) — source via configurable CLAUDE_CONFIG_DIR ──────
+if grep -q 'CLAUDE_CONFIG_DIR=' ~/.bashrc 2>/dev/null; then
+  log "CLAUDE_CONFIG_DIR block already in ~/.bashrc"
+elif [ "$DRY" = 1 ]; then
+  printf "${c_y}[dry-run]${c_0} append CLAUDE_CONFIG_DIR block to ~/.bashrc\n"
+else
+  cat >> ~/.bashrc <<'BLOCK'
+
+# claude-code-config (override CLAUDE_CONFIG_DIR to relocate the repo)
+export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$HOME/claude-code-config}"
+[ -f "$CLAUDE_CONFIG_DIR/shell/aliases.sh" ] && . "$CLAUDE_CONFIG_DIR/shell/aliases.sh"
+BLOCK
+  log "added CLAUDE_CONFIG_DIR block to ~/.bashrc"
+fi
 
 # ── 7. MCP servers (idempotent; honors DRY_RUN) ─────────────────────────────
 if command -v claude >/dev/null; then
