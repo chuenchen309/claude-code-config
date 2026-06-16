@@ -86,6 +86,7 @@
   },
   "language": "繁體中文",
   "effortLevel": "xhigh",
+  "outputStyle": "Proactive",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "normal",
   "remoteControlAtStartup": false,
