@@ -18,11 +18,6 @@ err()  { printf "${c_r}[err]${c_0} %s\n" "$*"; }
 # run: execute a mutating command, or just print it in DRY mode
 run()  { if [ "$DRY" = 1 ]; then printf "${c_y}[dry-run]${c_0} %s\n" "$*"; else "$@"; fi; }
 backup(){ [ -e "$1" ] || return 0; run cp -a "$1" "$1.bak-$TS"; }
-append_once(){ # $1=line  $2=file
-  if grep -qF "$1" "$2" 2>/dev/null; then log "already in $(basename "$2"): $1"
-  elif [ "$DRY" = 1 ]; then printf "${c_y}[dry-run]${c_0} append to %s: %s\n" "$2" "$1"
-  else printf '\n# dotfiles claude aliases\n%s\n' "$1" >> "$2"; log "appended to $2"; fi
-}
 
 [ "$DRY" = 1 ] && warn "DRY-RUN — nothing will be changed."
 command -v git >/dev/null || { err "git required"; exit 1; }
