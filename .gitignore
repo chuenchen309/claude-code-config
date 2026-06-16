@@ -1,6 +1,8 @@
 # ── SECRETS / machine state — NEVER commit ──────────────────────────────────
 **/.credentials.json
 **/.claude.json
+# Claude Code auto-rotates these — they are full copies of .claude.json
+**/.claude.json.backup.*
 .env
 .env.*
 !.env.example
@@ -10,6 +12,8 @@
 *.secret
 
 # Claude per-machine / runtime state (not portable config)
+# Claude Code regenerates the native-host wrapper dir each launch
+/chrome/
 **/settings.local.json
 **/settings.json.bak
 **/settings.json.orig
