@@ -93,6 +93,14 @@ if [ -f "$DOT/rtk/filters.toml" ]; then
   log "install ~/.config/rtk/filters.toml"
 fi
 
+# ── 5b. ccstatusline config (the statusLine npx tool's display config) ───────
+if [ -f "$DOT/ccstatusline/settings.json" ]; then
+  run mkdir -p ~/.config/ccstatusline
+  backup ~/.config/ccstatusline/settings.json
+  run cp "$DOT/ccstatusline/settings.json" ~/.config/ccstatusline/settings.json
+  log "install ~/.config/ccstatusline/settings.json"
+fi
+
 # ── 6. shell aliases (cch) — source via configurable CLAUDE_CONFIG_DIR ──────
 if grep -q 'CLAUDE_CONFIG_DIR=' ~/.bashrc 2>/dev/null; then
   log "CLAUDE_CONFIG_DIR block already in ~/.bashrc"

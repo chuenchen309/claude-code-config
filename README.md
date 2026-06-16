@@ -28,6 +28,7 @@ claude                  # first launch fetches + enables all plugins
 | 4 | copies `settings.json`, `CLAUDE.md`, `RTK.md`, `hooks/`, `skills/` into `~/.claude` (backs up existing) |
 | 4b | repairs the machine-specific fnm node path inside `settings.json` |
 | 5 | installs `rtk/filters.toml` → `~/.config/rtk/` |
+| 5b | installs `ccstatusline/settings.json` → `~/.config/ccstatusline/` |
 | 6 | adds a `CLAUDE_CONFIG_DIR` block to `~/.bashrc` that sources `shell/aliases.sh` (the `cch` alias) |
 | 7 | registers MCP servers: context7, markitdown, headroom, serena |
 | 8 | plugins re-install declaratively on next `claude` launch |
@@ -44,6 +45,7 @@ claude/
   skills/               find-skills, frontend-workflow, shadcn, vercel-react-best-practices, web-design-guidelines
   re-create-mcp.sh      idempotent MCP registration (called by bootstrap)
 rtk/filters.toml        rtk filter rules
+ccstatusline/settings.json  statusline display config (powerline nord-aurora)
 shell/aliases.sh        cch wrapper
 tools/versions.lock     pinned versions reference
 ```
