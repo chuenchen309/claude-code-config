@@ -14,6 +14,10 @@
 # Claude per-machine / runtime state (not portable config)
 # Claude Code regenerates the native-host wrapper dir each launch
 /chrome/
+# plugin runtime state — churning timestamps + machine-absolute paths
+# (plugins are declared in claude/settings.json; the vendored marketplaces/ stays tracked)
+/plugins/known_marketplaces.json
+/plugins/installed_plugins.json
 **/settings.local.json
 **/settings.json.bak
 **/settings.json.orig
