@@ -3,7 +3,8 @@
 # Safe to re-run: every step is guarded.
 #   real run:  ~/claude-code-config/bootstrap.sh
 #   preview :  DRY_RUN=1 ~/claude-code-config/bootstrap.sh   (prints every change, mutates nothing)
-# Repo location is configurable via $CLAUDE_CONFIG_DIR (default: $HOME/claude-code-config).
+# Repo location is configurable via $CCC_DIR (default: $HOME/claude-code-config).
+# (NOT named CLAUDE_CONFIG_DIR on purpose — that var is Claude Code's own config dir.)
 set -euo pipefail
 
 DOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -101,19 +102,21 @@ if [ -f "$DOT/ccstatusline/settings.json" ]; then
   log "install ~/.config/ccstatusline/settings.json"
 fi
 
-# ── 6. shell aliases (cch) — source via configurable CLAUDE_CONFIG_DIR ──────
-if grep -q 'CLAUDE_CONFIG_DIR=' ~/.bashrc 2>/dev/null; then
-  log "CLAUDE_CONFIG_DIR block already in ~/.bashrc"
+# ── 6. shell aliases (cch) — source via configurable CCC_DIR ────────────────
+# CCC_DIR (not CLAUDE_CONFIG_DIR!) locates the repo to source aliases.sh; naming
+# it CLAUDE_CONFIG_DIR would hijack Claude Code's own config dir to the repo.
+if grep -qE 'CCC_DIR=|CLAUDE_CONFIG_DIR=' ~/.bashrc 2>/dev/null; then
+  log "CCC_DIR block already in ~/.bashrc"
 elif [ "$DRY" = 1 ]; then
-  printf "${c_y}[dry-run]${c_0} append CLAUDE_CONFIG_DIR block to ~/.bashrc\n"
+  printf "${c_y}[dry-run]${c_0} append CCC_DIR block to ~/.bashrc\n"
 else
   cat >> ~/.bashrc <<'BLOCK'
 
-# claude-code-config (override CLAUDE_CONFIG_DIR to relocate the repo)
-export CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$HOME/claude-code-config}"
-[ -f "$CLAUDE_CONFIG_DIR/shell/aliases.sh" ] && . "$CLAUDE_CONFIG_DIR/shell/aliases.sh"
+# claude-code-config (override CCC_DIR to relocate the repo)
+export CCC_DIR="${CCC_DIR:-$HOME/claude-code-config}"
+[ -f "$CCC_DIR/shell/aliases.sh" ] && . "$CCC_DIR/shell/aliases.sh"
 BLOCK
-  log "added CLAUDE_CONFIG_DIR block to ~/.bashrc"
+  log "added CCC_DIR block to ~/.bashrc"
 fi
 
 # ── 7. MCP servers (idempotent; honors DRY_RUN) ─────────────────────────────

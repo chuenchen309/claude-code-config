@@ -13,8 +13,10 @@ source ~/.bashrc        # pick up the cch alias
 claude                  # first launch fetches + enables all plugins
 ```
 
-> Want the repo somewhere else? Clone wherever you like and set `CLAUDE_CONFIG_DIR` to that path
+> Want the repo somewhere else? Clone wherever you like and set `CCC_DIR` to that path
 > (default `$HOME/claude-code-config`) — `bootstrap.sh` self-locates, and the `~/.bashrc` block honors the var.
+> (The var is deliberately **not** `CLAUDE_CONFIG_DIR` — that is Claude Code's own config-dir
+> variable, and pointing it at the repo hijacks claude away from `~/.claude`.)
 
 `bootstrap.sh` is idempotent — safe to re-run any time to converge a machine back to this config.
 
@@ -29,7 +31,7 @@ claude                  # first launch fetches + enables all plugins
 | 4b | repairs the machine-specific fnm node path inside `settings.json` |
 | 5 | installs `rtk/filters.toml` → `~/.config/rtk/` |
 | 5b | installs `ccstatusline/settings.json` → `~/.config/ccstatusline/` |
-| 6 | adds a `CLAUDE_CONFIG_DIR` block to `~/.bashrc` that sources `shell/aliases.sh` (the `cch` alias) |
+| 6 | adds a `CCC_DIR` block to `~/.bashrc` that sources `shell/aliases.sh` (the `cch` alias) |
 | 7 | registers MCP servers: context7, markitdown, headroom, serena |
 | 8 | plugins re-install declaratively on next `claude` launch |
 | 9 | prints a verification checklist |

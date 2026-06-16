@@ -1,4 +1,4 @@
-# shell/aliases.sh — sourced from ~/.bashrc via $CLAUDE_CONFIG_DIR (set by bootstrap.sh)
+# shell/aliases.sh — sourced from ~/.bashrc via $CCC_DIR (set by bootstrap.sh)
 # Claude Code helpers
 
 # cch: open Claude via headroom token-compression wrapper, skip rtk layer
