@@ -33,10 +33,11 @@ ensure_uv_tool(){ # $1 = package name (as uv lists it), $2 = install spec
   if uv tool list 2>/dev/null | grep -q "^$1 "; then log "uv tool $1 present"
   else log "uv tool install $2"; run uv tool install "$2"; fi
 }
-# headroom needs the 'mcp' python SDK injected into its venv for 'headroom mcp serve'
-# (plain 'uv tool install headroom-ai' omits it -> MCP server fails with ImportError).
-log "ensure headroom-ai (+ mcp sdk)"
-run uv tool install headroom-ai==0.25.0 --with mcp
+# headroom needs TWO extras: the '[proxy]' extra (fastapi/uvicorn) for 'headroom wrap'/cch,
+# and the standalone 'mcp' SDK for 'headroom mcp serve'. Plain install omits both ->
+# cch fails ("No module named 'fastapi'") and the MCP server ImportErrors.
+log "ensure headroom-ai ([proxy] extra + mcp sdk)"
+run uv tool install 'headroom-ai[proxy]==0.25.0' --with mcp
 ensure_uv_tool "markitdown"     "markitdown"
 ensure_uv_tool "markitdown-mcp" "markitdown-mcp"
 [ "$DRY" = 1 ] || uv tool update-shell 2>/dev/null || true

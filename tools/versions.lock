@@ -3,9 +3,10 @@
 
 claude          2.1.178      # native installer (~/.local/share/claude)
 rtk             0.42.3       # prebuilt static-pie ELF binary in ~/.local/bin (no package index)
-headroom-ai     0.25.0       # uv/pipx tool -> bin: headroom. MCP server needs 'mcp' SDK:
-                             #   uv tool install headroom-ai==0.25.0 --with mcp
-                             #   (pipx: pipx inject headroom-ai mcp) — else 'headroom mcp serve' ImportErrors
+headroom-ai     0.25.0       # uv tool -> bin: headroom. Needs TWO extras:
+                             #   uv tool install 'headroom-ai[proxy]==0.25.0' --with mcp
+                             #   [proxy] = fastapi/uvicorn for 'headroom wrap'/cch (else "No module named 'fastapi'")
+                             #   mcp     = SDK for 'headroom mcp serve' (else ImportError)
 markitdown      0.1.6        # uv/pipx tool
 markitdown-mcp  0.0.1a4      # uv/pipx tool
 uv              0.10.6       # astral installer
