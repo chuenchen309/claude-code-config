@@ -62,12 +62,15 @@ for f in settings.json CLAUDE.md RTK.md; do
   log "install ~/.claude/$f"
 done
 run cp -a "$CLAUDE_SRC/hooks/."  ~/.claude/hooks/  ; log "install hooks"
-# skills: install per-skill (symlink-safe). home = source of truth; machine-only skills are left untouched.
+# skills: additive + symlink-safe. Keep whatever already resolves (incl. company's
+# symlinks into ~/.agents/skills); only install genuinely missing/broken ones.
+# Machine-only skills (not in repo) are never touched.
 for sk in "$CLAUDE_SRC"/skills/*/; do
   name="$(basename "$sk")"; tgt="$HOME/.claude/skills/$name"
+  if [ -d "$tgt" ] && [ -n "$(ls -A "$tgt" 2>/dev/null)" ]; then log "skill present: $name (skip)"; continue; fi
   if [ -e "$tgt" ] || [ -L "$tgt" ]; then backup "$tgt"; run rm -rf "$tgt"; fi
   run cp -a "$sk" "$tgt"
-  log "skill: $name"
+  log "skill installed: $name"
 done
 
 # ── 4b. repair machine-specific fnm node path inside settings.json ──────────
