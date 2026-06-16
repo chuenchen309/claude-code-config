@@ -1,0 +1,7 @@
+# Force LF so WSL/Linux scripts keep their exec semantics across machines/Windows checkouts
+* text=auto eol=lf
+*.sh   text eol=lf
+*.js   text eol=lf
+*.toml text eol=lf
+*.png  binary
+*.jpg  binary

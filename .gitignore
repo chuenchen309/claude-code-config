@@ -1,0 +1,30 @@
+# ── SECRETS / machine state — NEVER commit ──────────────────────────────────
+**/.credentials.json
+**/.claude.json
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.token
+*.secret
+
+# Claude per-machine / runtime state (not portable config)
+**/settings.local.json
+**/settings.json.bak
+**/settings.json.orig
+**/history.jsonl
+**/projects/
+**/file-history/
+**/shell-snapshots/
+**/paste-cache/
+**/session-env/
+**/sessions/
+**/todos/
+**/.last-*
+**/.caveman-active
+**/.caveman-history.jsonl
+
+# OS / editor noise
+.DS_Store
+*.swp
