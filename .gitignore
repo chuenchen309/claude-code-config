@@ -30,8 +30,6 @@
 **/sessions/
 **/todos/
 **/.last-*
-**/.caveman-active
-**/.caveman-history.jsonl
 
 # OS / editor noise
 .DS_Store

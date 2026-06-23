@@ -30,7 +30,7 @@ if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
   Write-Host 'claude not on PATH'; exit 1
 }
 
-# Resolve the uv tool bin dir (where uvx.exe / headroom.exe / markitdown-mcp.exe
+# Resolve the uv tool bin dir (where uvx.exe / markitdown-mcp.exe
 # land). PATH inheritance after `uv tool update-shell` is flaky on Windows, so we
 # bake absolute .exe paths into the MCP configs instead of relying on bare names.
 $BinDir = $null
@@ -58,11 +58,5 @@ Add-Mcp 'markitdown' @{ command = "$BinFwd/markitdown-mcp.exe" }
 # serena via `uv tool run` (= uvx) — uv ships uv.exe but not always a separate
 # uvx.exe on Windows, and `uv tool run` is always present.
 Add-Mcp 'serena'     @{ command = "$BinFwd/uv.exe"; args = @('tool', 'run', '--from', 'git+https://github.com/oraios/serena', 'serena', 'start-mcp-server', '--project-from-cwd', '--context', 'claude-code') }
-# headroom-ai often fails to build on native Windows (sdist needs Rust/maturin, no
-# prebuilt wheel) — only register it if its .exe actually installed.
-if (Test-Path (Join-Path $BinDir 'headroom.exe')) {
-  Add-Mcp 'headroom' @{ command = "$BinFwd/headroom.exe"; args = @('mcp', 'serve') }
-}
-else { Write-Host '[mcp] headroom skipped - headroom.exe not installed (needs Rust to build on Windows)' }
 
 Write-Host "[mcp] done - run 'claude mcp list' to verify (X/Pending = run /mcp inside claude)."

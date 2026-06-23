@@ -86,5 +86,3 @@ Minimize interaction at routine *workflow gates* (not technical decisions — Pr
 ## Document Extraction
 
 To convert any document to Markdown (PDF, Word, PowerPoint, Excel, HTML, EPub, images/OCR, audio/transcription, CSV/JSON/XML, ZIP, YouTube URLs), use **markitdown** first — CLI (`markitdown file -o out.md`) or the `mcp__markitdown__convert_to_markdown` MCP tool — *except* for multi-column PDFs needing clean column order, where `pdftotext -layout` does better.
-
-@RTK.md

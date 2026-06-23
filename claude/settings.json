@@ -2,43 +2,7 @@
   "permissions": {
     "defaultMode": "bypassPermissions"
   },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "rtk hook claude"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"/home/USER/.local/share/fnm/node-versions/v24.14.0/installation/bin/node\" \"/home/USER/.claude/hooks/caveman-activate.js\"",
-            "timeout": 5,
-            "statusMessage": "Loading caveman mode..."
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"/home/USER/.local/share/fnm/node-versions/v24.14.0/installation/bin/node\" \"/home/USER/.claude/hooks/caveman-mode-tracker.js\"",
-            "timeout": 5,
-            "statusMessage": "Tracking caveman mode..."
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "statusLine": {
     "type": "command",
     "command": "npx -y ccstatusline@latest",
@@ -49,7 +13,6 @@
     "frontend-design@claude-code-plugins": true,
     "ui-ux-pro-max@ui-ux-pro-max-skill": true,
     "codex@openai-codex": true,
-    "caveman@caveman": true,
     "understand-anything@understand-anything": true
   },
   "extraKnownMarketplaces": {
@@ -69,12 +32,6 @@
       "source": {
         "source": "github",
         "repo": "openai/codex-plugin-cc"
-      }
-    },
-    "caveman": {
-      "source": {
-        "source": "github",
-        "repo": "JuliusBrussee/caveman"
       }
     },
     "understand-anything": {

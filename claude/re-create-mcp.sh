@@ -21,7 +21,6 @@ add_mcp() {
 
 add_mcp context7   npx -y @upstash/context7-mcp
 add_mcp markitdown "$HOME/.local/bin/markitdown-mcp"
-add_mcp headroom   headroom mcp serve
 add_mcp serena     uvx --from git+https://github.com/oraios/serena serena start-mcp-server --project-from-cwd --context claude-code
 
 echo "[mcp] done — run 'claude mcp list' to verify (✗/Pending = run /mcp inside claude)."
