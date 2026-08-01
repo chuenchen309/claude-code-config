@@ -14,7 +14,6 @@ node            v24.14.0     # via fnm (fnm install 24)
 # MCP servers (user scope, no secrets):
 #   context7    npx -y @upstash/context7-mcp
 #   markitdown  ~/.local/bin/markitdown-mcp
-#   serena      uvx --from git+https://github.com/oraios/serena serena start-mcp-server --project-from-cwd --context claude-code
 
 # Plugins (declarative via claude/settings.json -> enabledPlugins + extraKnownMarketplaces):
 #   superpowers@superpowers-marketplace      obra/superpowers-marketplace

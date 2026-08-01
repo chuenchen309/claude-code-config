@@ -5,8 +5,7 @@
 #
 # Uses `claude mcp add-json` (not `claude mcp add -- ...`) on purpose: the `--`
 # positional form mangles tokens on Windows — it rewrites `cmd /c` -> `cmd C:/`
-# (claude-code #20061) and drops serena's `--from` (serena #323). Passing a JSON
-# blob sidesteps both parsers.
+# (claude-code #20061). Passing a JSON blob sidesteps that parser.
 #
 # Set $env:DRY_RUN=1 to preview without changing anything.
 $ErrorActionPreference = 'Stop'
@@ -30,8 +29,8 @@ if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
   Write-Host 'claude not on PATH'; exit 1
 }
 
-# Resolve the uv tool bin dir (where uvx.exe / markitdown-mcp.exe
-# land). PATH inheritance after `uv tool update-shell` is flaky on Windows, so we
+# Resolve the uv tool bin dir (where markitdown-mcp.exe
+# lands). PATH inheritance after `uv tool update-shell` is flaky on Windows, so we
 # bake absolute .exe paths into the MCP configs instead of relying on bare names.
 $BinDir = $null
 if (Get-Command uv -ErrorAction SilentlyContinue) {
@@ -55,8 +54,5 @@ function Add-Mcp($name, $config) {
 # directly, so it must go through `cmd /c`. The .exe-based servers below do not.
 Add-Mcp 'context7'   @{ command = 'cmd'; args = @('/c', 'npx', '-y', '@upstash/context7-mcp') }
 Add-Mcp 'markitdown' @{ command = "$BinFwd/markitdown-mcp.exe" }
-# serena via `uv tool run` (= uvx) — uv ships uv.exe but not always a separate
-# uvx.exe on Windows, and `uv tool run` is always present.
-Add-Mcp 'serena'     @{ command = "$BinFwd/uv.exe"; args = @('tool', 'run', '--from', 'git+https://github.com/oraios/serena', 'serena', 'start-mcp-server', '--project-from-cwd', '--context', 'claude-code') }
 
 Write-Host "[mcp] done - run 'claude mcp list' to verify (X/Pending = run /mcp inside claude)."

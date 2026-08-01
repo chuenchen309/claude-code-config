@@ -2480,16 +2480,6 @@
       "homepage": "https://sentry.io"
     },
     {
-      "name": "serena",
-      "description": "Semantic code analysis MCP server providing intelligent code understanding, refactoring suggestions, and codebase navigation through language server protocol integration.",
-      "category": "development",
-      "source": "./external_plugins/serena",
-      "homepage": "https://github.com/anthropics/claude-plugins-public/tree/main/external_plugins/serena",
-      "tags": [
-        "community-managed"
-      ]
-    },
-    {
       "name": "servicenow-sdk",
       "description": "Create, edit, and deploy ServiceNow applications with the Fluent SDK effortlessly through Claude AI.",
       "author": {

@@ -121,7 +121,7 @@ Probe 'node'       'node'
 # the server silently while the CLI probes above still report OK.
 $binDir = (Get-Command uv -ErrorAction SilentlyContinue).Source
 $binDir = if ($binDir) { Split-Path $binDir } else { Join-Path $HOME '.local\bin' }
-foreach ($exe in 'markitdown-mcp.exe', 'uv.exe') {   # serena uses uv.exe (uv tool run)
+foreach ($exe in 'markitdown-mcp.exe') {
   $p = Join-Path $binDir $exe
   if (Test-Path $p) { Write-Host "  mcp bin:    OK $exe" } else { Warn "MCP server binary missing: $p" }
 }

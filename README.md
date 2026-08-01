@@ -35,7 +35,7 @@ claude                                              # first launch fetches + ena
 
 | Area | Windows behavior |
 |---|---|
-| MCP servers | registered with `claude mcp add-json` (sidesteps the Windows `-- cmd /c` / `--from` arg-parsing bugs); context7 via `cmd /c npx`, markitdown via absolute `%USERPROFILE%\.local\bin\markitdown-mcp.exe`, serena via `uv tool run` (no separate `uvx.exe` needed). |
+| MCP servers | registered with `claude mcp add-json` (sidesteps the Windows `-- cmd /c` arg-parsing bug); context7 via `cmd /c npx`, markitdown via absolute `%USERPROFILE%\.local\bin\markitdown-mcp.exe`. |
 
 **Prereqs on the Windows box:** Node.js on PATH (Claude Code needs it), Git for Windows (enables the Bash tool + Git Bash hook execution), and PowerShell 7 recommended (`winget install Microsoft.PowerShell`). `bootstrap.ps1` installs `uv` itself if missing.
 
@@ -48,7 +48,7 @@ claude                                              # first launch fetches + ena
 | 3 | copies `settings.json`, `CLAUDE.md`, `skills/` into `~/.claude` (backs up existing) |
 | 4 | installs `ccstatusline/settings.json` → `~/.config/ccstatusline/` |
 | 5 | adds a `CCC_DIR` block to `~/.bashrc` that sources `shell/aliases.sh` |
-| 6 | registers MCP servers: context7, markitdown, serena |
+| 6 | registers MCP servers: context7, markitdown |
 | 7 | plugins re-install declaratively on next `claude` launch |
 | 8 | prints a verification checklist |
 
