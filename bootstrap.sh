@@ -54,6 +54,7 @@ done
 # symlinks into ~/.agents/skills); only install genuinely missing/broken ones.
 # Machine-only skills (not in repo) are never touched.
 for sk in "$CLAUDE_SRC"/skills/*/; do
+  [ -d "$sk" ] || continue          # no skills in the repo -> unmatched glob
   name="$(basename "$sk")"; tgt="$HOME/.claude/skills/$name"
   if [ -d "$tgt" ] && [ -n "$(ls -A "$tgt" 2>/dev/null)" ]; then log "skill present: $name (skip)"; continue; fi
   if [ -e "$tgt" ] || [ -L "$tgt" ]; then backup "$tgt"; run rm -rf "$tgt"; fi

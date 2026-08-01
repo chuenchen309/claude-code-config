@@ -45,7 +45,7 @@ claude                                              # first launch fetches + ena
 |---|---|
 | 1 | `uv` + `markitdown`, `markitdown-mcp` |
 | 2 | checks `fnm`/node |
-| 3 | copies `settings.json`, `CLAUDE.md`, `skills/` into `~/.claude` (backs up existing) |
+| 3 | copies `settings.json`, `CLAUDE.md` into `~/.claude` (backs up existing); installs `claude/skills/*` if any are present |
 | 4 | installs `ccstatusline/settings.json` → `~/.config/ccstatusline/` |
 | 5 | adds a `CCC_DIR` block to `~/.bashrc` that sources `shell/aliases.sh` |
 | 6 | registers MCP servers: context7, markitdown |
@@ -59,7 +59,6 @@ bootstrap.sh            idempotent orchestrator
 claude/
   settings.json         5 enabled plugins + marketplaces + prefs (繁中, xhigh)
   CLAUDE.md             global instructions
-  skills/               find-skills, frontend-workflow, shadcn, vercel-react-best-practices, web-design-guidelines
   re-create-mcp.sh      idempotent MCP registration (called by bootstrap)
 ccstatusline/settings.json  statusline display config (powerline nord-aurora)
 shell/aliases.sh        shell aliases
