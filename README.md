@@ -45,10 +45,10 @@ claude                                              # first launch fetches + ena
 |---|---|
 | 1 | `uv` + `markitdown`, `markitdown-mcp` |
 | 2 | checks `fnm`/node |
-| 3 | copies `settings.json`, `CLAUDE.md` into `~/.claude` (backs up existing); installs `claude/skills/*` if any are present |
+| 3 | copies `settings.json`, `CLAUDE.md`, `rules/*.md` into `~/.claude` (backs up existing); installs `claude/skills/*` if any are present |
 | 4 | installs `ccstatusline/settings.json` → `~/.config/ccstatusline/` |
 | 5 | adds a `CCC_DIR` block to `~/.bashrc` that sources `shell/aliases.sh` |
-| 6 | registers MCP servers: context7, markitdown |
+| 6 | registers MCP servers: context7, markitdown (`CONTEXT7_API_KEY` opt-in, see below) |
 | 7 | plugins re-install declaratively on next `claude` launch |
 | 8 | prints a verification checklist |
 
@@ -59,6 +59,7 @@ bootstrap.sh            idempotent orchestrator
 claude/
   settings.json         5 enabled plugins + marketplaces + prefs (繁中, xhigh)
   CLAUDE.md             global instructions
+  rules/                auto-loaded instruction fragments (context7)
   re-create-mcp.sh      idempotent MCP registration (called by bootstrap)
 ccstatusline/settings.json  statusline display config (powerline nord-aurora)
 shell/aliases.sh        shell aliases
@@ -78,3 +79,7 @@ Edit files here (or copy fresh from `~/.claude`), commit, push. On other machine
 ## Manual steps bootstrap can't do headlessly
 
 - **OAuth MCP connectors** (Gmail/Drive/Calendar/Notion): account-managed, run `/mcp` inside claude to auth.
+- **`CONTEXT7_API_KEY`**: this repo is public, so the key lives nowhere in it. Export it before bootstrap
+  (`export CONTEXT7_API_KEY=…` / `$env:CONTEXT7_API_KEY=…`) and context7 registers with your own quota;
+  leave it unset and context7 still works, just rate-limited. Already-registered servers are skipped —
+  to switch an existing one over, `claude mcp remove context7 -s user` first, then re-run.

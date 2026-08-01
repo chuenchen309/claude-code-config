@@ -19,7 +19,15 @@ add_mcp() {
   fi
 }
 
-add_mcp context7   npx -y @upstash/context7-mcp
+# context7 works anonymously but is rate-limited; export CONTEXT7_API_KEY to get
+# your own quota. The key is a secret — it is injected here, never committed.
+c7=(npx -y @upstash/context7-mcp)
+if [ -n "${CONTEXT7_API_KEY:-}" ]; then
+  c7+=(--api-key "$CONTEXT7_API_KEY")
+else
+  echo "[mcp] note: CONTEXT7_API_KEY unset — registering context7 anonymously (rate-limited)"
+fi
+add_mcp context7   "${c7[@]}"
 add_mcp markitdown "$HOME/.local/bin/markitdown-mcp"
 
 echo "[mcp] done — run 'claude mcp list' to verify (✗/Pending = run /mcp inside claude)."

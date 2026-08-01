@@ -56,7 +56,7 @@ else { Warn 'node MISSING - install Node.js (https://nodejs.org, winget, or fnm)
 
 # ── 3. Claude config into ~/.claude ─────────────────────────────────────────
 if (-not $DRY) {
-  New-Item -ItemType Directory -Force -Path $ClaudeDir, (Join-Path $ClaudeDir 'skills') | Out-Null
+  New-Item -ItemType Directory -Force -Path $ClaudeDir, (Join-Path $ClaudeDir 'skills'), (Join-Path $ClaudeDir 'rules') | Out-Null
 }
 
 # settings.json needs no transform on Windows — it carries no hooks/paths, so it
@@ -68,6 +68,15 @@ foreach ($f in 'CLAUDE.md', 'settings.json') {
   Backup $dst
   if (-not $DRY) { Copy-Item -LiteralPath $src $dst -Force }
   Log "install ~/.claude/$f"
+}
+
+# rules/: global instruction fragments; Claude Code auto-loads ~/.claude/rules/*.md
+# alongside CLAUDE.md. Repo is source of truth, so these overwrite (like CLAUDE.md).
+Get-ChildItem -File -Filter *.md -Path (Join-Path $ClaudeSrc 'rules') -ErrorAction SilentlyContinue | ForEach-Object {
+  $dst = Join-Path $ClaudeDir "rules\$($_.Name)"
+  Backup $dst
+  if (-not $DRY) { Copy-Item -LiteralPath $_.FullName $dst -Force }
+  Log "install ~/.claude/rules/$($_.Name)"
 }
 
 # skills: additive — keep whatever already resolves; only install missing/empty ones

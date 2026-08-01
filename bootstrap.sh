@@ -43,12 +43,21 @@ command -v fnm >/dev/null && log "fnm present" \
   || warn "fnm MISSING — curl -fsSL https://fnm.vercel.app/install | bash ; then 'fnm install 24'"
 
 # ── 3. Claude config into ~/.claude ─────────────────────────────────────────
-run mkdir -p ~/.claude ~/.claude/skills
+run mkdir -p ~/.claude ~/.claude/skills ~/.claude/rules
 for f in settings.json CLAUDE.md; do
   [ -f "$CLAUDE_SRC/$f" ] || continue
   backup ~/.claude/"$f"
   run cp "$CLAUDE_SRC/$f" ~/.claude/"$f"
   log "install ~/.claude/$f"
+done
+# rules/: global instruction fragments; Claude Code auto-loads ~/.claude/rules/*.md
+# alongside CLAUDE.md. Repo is source of truth, so these overwrite (like CLAUDE.md).
+for r in "$CLAUDE_SRC"/rules/*.md; do
+  [ -f "$r" ] || continue
+  name="$(basename "$r")"
+  backup ~/.claude/rules/"$name"
+  run cp "$r" ~/.claude/rules/"$name"
+  log "install ~/.claude/rules/$name"
 done
 # skills: additive + symlink-safe. Keep whatever already resolves (incl. company's
 # symlinks into ~/.agents/skills); only install genuinely missing/broken ones.

@@ -52,7 +52,12 @@ function Add-Mcp($name, $config) {
 
 # context7: npx is npx.cmd (a batch shim) — child_process.spawn can't launch it
 # directly, so it must go through `cmd /c`. The .exe-based servers below do not.
-Add-Mcp 'context7'   @{ command = 'cmd'; args = @('/c', 'npx', '-y', '@upstash/context7-mcp') }
+# context7 works anonymously but is rate-limited; set $env:CONTEXT7_API_KEY to get
+# your own quota. The key is a secret — it is injected here, never committed.
+$c7 = @('/c', 'npx', '-y', '@upstash/context7-mcp')
+if ($env:CONTEXT7_API_KEY) { $c7 += @('--api-key', $env:CONTEXT7_API_KEY) }
+else { Write-Host '[mcp] note: CONTEXT7_API_KEY unset - registering context7 anonymously (rate-limited)' }
+Add-Mcp 'context7'   @{ command = 'cmd'; args = $c7 }
 Add-Mcp 'markitdown' @{ command = "$BinFwd/markitdown-mcp.exe" }
 
 Write-Host "[mcp] done - run 'claude mcp list' to verify (X/Pending = run /mcp inside claude)."
